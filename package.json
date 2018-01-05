@@ -4,7 +4,8 @@
   "description": "Tooling for managing common tasks on the dfe digital platform.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "dfe": "node index.js"
   },
   "author": "",
   "license": "MIT",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
+    "minimist": "^1.2.0",
     "nconf": "^0.10.0",
     "nconf-yaml": "^1.0.2"
   }

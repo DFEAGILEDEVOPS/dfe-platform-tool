@@ -5,12 +5,9 @@ const assert = require('assert')
 const importFresh = require('import-fresh')
 
 // code under test
-const parameters = require('../index.js').parameters
+const parameters = require('../dfe.js').parameters
 
-// code under test
-const templates = require('../index.js').templates
-
-describe('Learning by the example', function(){
+describe('dfe platform tooling', function(){
  
   it('loads dotnetVersion from local test/parameters.yaml as 2.0-9', function(){
     const nconf = importFresh('nconf')
@@ -39,10 +36,12 @@ describe('Learning by the example', function(){
  
   it('loads templates from local test/parameters.yaml', function(){
     const nconf = importFresh('nconf')
-    const ts = parameters(nconf, 'test').get('templates')
-    test.object(ts).contains(['image-streams.json', 'build-config.yaml'])
+    const ts = parameters(nconf, 'test').get('parameters')
+    //console.dir(ts)
+    const params = ts['image-streams.json']
+    //console.dir(params)
+    test.object(params).contains({DOTNET_IMAGE_STREAM_TAG: { desc: 'The image stream tag which is used to build the code.',
+     value: 'dotnet:2.0' }})
   });
   
-    
-
 });
