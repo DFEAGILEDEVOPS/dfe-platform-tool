@@ -15,11 +15,17 @@ describe('Learning by the example', function(){
     test.string(dotnetVersion).startsWith('2.0-9')
   });
 
-  it('env var can overload dotnetVersion as 2.0-9', function(){
+  it('env var can overload dotnetVersion in parameters.yaml as 2.0-10', function(){
     process.env['dotnetVersion'] = "2.0-10"
     const nconf = importFresh("nconf")
     const dotnetVersion = parameters(nconf, 'test').get("dotnetVersion")
     test.string(dotnetVersion).startsWith('2.0-10')
+  });
+
+  it('loads rshinyVersion from local test/parameters.yaml as 2.0-9', function(){
+    const nconf = importFresh("nconf")
+    const dotnetVersion = parameters(nconf, 'test').get("rshinyVersion")
+    test.string(dotnetVersion).startsWith('1.5.3.838')
   });
  
 });
