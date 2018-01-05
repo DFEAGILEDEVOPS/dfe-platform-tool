@@ -5,20 +5,20 @@ const assert = require('assert')
 const importFresh = require("import-fresh")
 
 // code under test
-const parameters = require('../index.js')
+const parameters = require('../index.js').parameters
 
 describe('Learning by the example', function(){
  
   it('loads dotnetVersion from local test/parameters.yaml as 2.0-9', function(){
     const nconf = importFresh("nconf")
-    const dotnetVersion = parameters(nconf).get("dotnetVersion")
+    const dotnetVersion = parameters(nconf, 'test').get("dotnetVersion")
     test.string(dotnetVersion).startsWith('2.0-9')
   });
 
   it('env var can overload dotnetVersion as 2.0-9', function(){
     process.env['dotnetVersion'] = "2.0-10"
     const nconf = importFresh("nconf")
-    const dotnetVersion = parameters(nconf).get("dotnetVersion")
+    const dotnetVersion = parameters(nconf, 'test').get("dotnetVersion")
     test.string(dotnetVersion).startsWith('2.0-10')
   });
  

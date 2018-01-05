@@ -15,6 +15,7 @@
     "unit.js": "^2.0.0"
   },
   "dependencies": {
+    "lodash": "^4.17.4",
     "nconf": "^0.10.0",
     "nconf-yaml": "^1.0.2"
   }
