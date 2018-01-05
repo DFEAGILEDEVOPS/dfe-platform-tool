@@ -1,3 +1,14 @@
+# dotnetVersions should only contain healthy images as shown at https://access.redhat.com/containers/?tab=tags#/registry.access.redhat.com/dotnet/dotnet-20-runtime-rhel7
+# will be supplied by the platform
+dotnetVersions:
+  - 2.0-9
+  - 2.0-10
+# dotnetVersion should contain the a healthy version from the list above to be supplied by the project team. 
+# is validated against known healthy list supplied by the platform
 dotnetVersion: 2.0-9
+# any old other value as something parsed but ignored in the test
 rshinyVersion: 1.5.3.838
-
+# The list of templates that are to be run to with the parameters. will be supplied by the platform
+templates: 
+ - image-streams.json
+ - build-config.yaml
