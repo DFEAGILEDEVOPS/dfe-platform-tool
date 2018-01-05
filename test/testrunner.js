@@ -39,7 +39,7 @@ describe('Learning by the example', function(){
  
   it('loads templates from local test/parameters.yaml', function(){
     const nconf = importFresh('nconf')
-    const ts = templates(parameters(nconf, 'test'))
+    const ts = parameters(nconf, 'test').get('templates')
     test.object(ts).contains(['image-streams.json', 'build-config.yaml'])
   });
   
