@@ -4,79 +4,22 @@ const assert = require('assert')
 // basically when you require('config') is initializes from env vars so we use 'import-fresh' to reload it in different tests 
 const importFresh = require("import-fresh")
 
-const getDbConfig = require('../index.js')
+// code under test
+const parameters = require('../index.js')
 
 describe('Learning by the example', function(){
  
-  it('example variable', function(){
- 
-    // just for example of tested value 
-    var example = 'hello world';
- 
-    test
-      .string(example)
-        .startsWith('hello')
-        .match(/[a-z]/)
- 
-      .given(example = 'you are welcome')
-        .string(example)
-          .endsWith('welcome')
-          .contains('you')
- 
-      .when('"example" becomes an object', function(){
- 
-        example = {
-          message : 'hello world',
-          name    : 'Nico',
-          job     : 'developper',
-          from    : 'France'
-        };
-      })
- 
-      .then('test the "example" object', function(){
- 
-        test
-          .object(example)
-            .hasValue('developper')
-            .hasProperty('name')
-            .hasProperty('from', 'France')
-            .contains({message: 'hello world'})
-        ;
-      })
- 
-      .if(example = 'bad value')
-        .error(function(){
-          example.badMethod();
-        })
-    ;
- 
-  });
- 
-  it('loads default config as localhost', function(){
-    const testConfig = importFresh("nconf")
-    testConfig.argv()
-        .env()
-        .file({ file: 'config/default.yaml', format: require('nconf-yaml') });
-    const dbconf = getDbConfig(testConfig, 'host');
-    //test.object(dbconf).hasProperty('host', 'localhost');
-    test.string(dbconf).startsWith('localhost')
+  it('loads dotnetVersion from local test/parameters.yaml as 2.0-9', function(){
+    const nconf = importFresh("nconf")
+    const dotnetVersion = parameters(nconf).get("dotnetVersion")
+    test.string(dotnetVersion).startsWith('2.0-9')
   });
 
-//   it('loads production config as prod-db-server', function(){
-//     process.env['NODE_ENV'] = "production"
-//     const testConfig = importFresh("nconf")
-//     testConfig.argv()
-//         .env()
-//         .file({ file: 'config/default.json' });
-//     const dbconf = getDbConfig(testConfig)
-//     test.object(dbconf).hasProperty('host', 'prod-db-server')
-//   });
-
-//   it('loads whatever config as whatever-db-server', function(){
-//     process.env['NODE_ENV'] = "whatever"
-//     const testConfig = importFresh("config")
-//     const dbconf = getDbConfig(testConfig)
-//     test.object(dbconf).hasProperty('host', 'whatever-db-server')
-//   });
+  it('env var can overload dotnetVersion as 2.0-9', function(){
+    process.env['dotnetVersion'] = "2.0-10"
+    const nconf = importFresh("nconf")
+    const dotnetVersion = parameters(nconf).get("dotnetVersion")
+    test.string(dotnetVersion).startsWith('2.0-10')
+  });
  
 });

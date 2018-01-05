@@ -1,8 +1,10 @@
 
-// dependency inject config so that it can be mocked in the real app use var config = require('config');
-function getDbConfig(config, key) {
-  var dbConfig = config.get(key);
-  return dbConfig;
+// dependency inject config so that it can be mocked in the real app use var config = require('nconf');
+function parameters(nconf) {
+      nconf.argv()
+        .env()
+        .file({ file: 'test/parameters.yaml', format: require('nconf-yaml') });
+  return nconf;
 }
 
-module.exports = getDbConfig;
+module.exports = parameters;
