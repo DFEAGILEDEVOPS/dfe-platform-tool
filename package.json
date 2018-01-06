@@ -19,6 +19,7 @@
     "lodash": "^4.17.4",
     "minimist": "^1.2.0",
     "nconf": "^0.10.0",
-    "nconf-yaml": "^1.0.2"
+    "nconf-yaml": "^1.0.2",
+    "string-template": "^1.0.0"
   }
 }
