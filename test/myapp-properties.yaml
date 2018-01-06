@@ -13,8 +13,8 @@ templates:
  - image-streams.json
  - build-config.yaml
 # The list of parameters to apply to a given template
-parameters: 
-  image-streams.json:
+templateParameters: 
+  dotnet-example.json:
     APPLICATION_DOMAIN: 
       desc: "The exposed hostname that will route to the .NET Core service, if left blank a value will be defaulted."
       value: ~
@@ -63,3 +63,10 @@ parameters:
     SOURCE_REPOSITORY_URL: 
       desc: "The URL of the repository with your application source code."
       value: "https://github.com/redhat-developer/s2i-dotnetcore-ex.git"
+  dotnetpgsql.json:
+    WHATEVER: 
+      desc: "The exposed hostname that will route to the .NET Core service, if left blank a value will be defaulted."
+      value: ~
+    BLAH: 
+      desc: "Set this to use a subdirectory of the source code repository"
+      value: ~
