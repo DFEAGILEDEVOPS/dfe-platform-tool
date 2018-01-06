@@ -34,14 +34,19 @@ describe('dfe platform tooling', function(){
     test.object(dotnetVersions).contains(['2.0-9','2.0-10']);
   });
  
-  it('loads templates from local test/parameters.yaml', function(){
+  it('loads template parameters from local test/parameters.yaml', function(){
     const nconf = importFresh('nconf')
     const ts = parameters(nconf, 'test').get('parameters')
-    //console.dir(ts)
     const params = ts['image-streams.json']
-    //console.dir(params)
     test.object(params).contains({DOTNET_IMAGE_STREAM_TAG: { desc: 'The image stream tag which is used to build the code.',
-     value: 'dotnet:2.0' }})
+      value: 'dotnet:2.0' }})
+  });
+
+  it('handles empty parameters from local test/parameters.yaml', function(){
+    const nconf = importFresh('nconf')
+    const ts = parameters(nconf, 'test').get('parameters')
+    const params = ts['image-streams.json']
+    test.object(params).contains({CONTEXT_DIR: { desc: 'Set this to use a subdirectory of the source code repository', value: null}})
   });
   
 });
