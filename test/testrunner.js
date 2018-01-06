@@ -7,6 +7,9 @@ const importFresh = require('import-fresh')
 // code under test
 const parameters = require('../dfe.js').parameters
 
+// code under test
+const templateParameters = require('../dfe.js').templateParameters
+
 describe('dfe platform tooling', function(){
  
   it('loads dotnetVersion from local test/parameters.yaml as 2.0-9', function(){
@@ -49,10 +52,10 @@ describe('dfe platform tooling', function(){
     test.object(params).contains({CONTEXT_DIR: { desc: 'Set this to use a subdirectory of the source code repository', value: null}})
   });
   
-  it('can convert non-emptry parameters from local test/parameters.yaml as tuples of name and value', function(){
+  it('can convert non-emptry parameters from local test/parameters.yaml into a map of param name to value', function(){
     const nconf = importFresh('nconf')
-    const templateParameters = parameters(nconf, 'test/myapp-properties.yaml').get('templateParameters')
-    const params = templateParameters['dotnet-example.json']
-    test.object(params).contains({CONTEXT_DIR: { desc: 'Set this to use a subdirectory of the source code repository', value: null}})
+    const params = templateParameters(nconf, 'test/myapp-properties.yaml', 'dotnet-example.json')
+    test.object(params).contains({DOTNET_IMAGE_STREAM_TAG: 'dotnet:2.0'})
+    test.string(typeof params['CONTEXT_DIR']).isEqualTo('undefined')
   });
 });
