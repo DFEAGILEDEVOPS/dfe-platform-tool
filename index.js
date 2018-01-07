@@ -21,9 +21,9 @@ switch(command) {
         }
         break;
     case "scmsecret":
-        // https://blog.openshift.com/using-ssh-key-for-s2i-builds/gi
         const sshprivatekey = argv._[1]
         if( sshprivatekey.startsWith('ssh-privatekey=') ) {
+            // https://blog.openshift.com/using-ssh-key-for-s2i-builds/gi
             console.log("oc secrets new scmsecret "+sshprivatekey)
             console.log("oc secrets link builder scmsecret")
         } else {

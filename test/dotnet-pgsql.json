@@ -99,7 +99,10 @@
             "uri": "${SOURCE_REPOSITORY_URL}",
             "ref": "${SOURCE_REPOSITORY_REF}"
           },
-          "contextDir": "${CONTEXT_DIR}"
+          "contextDir": "${CONTEXT_DIR}",
+          "sourceSecret": {
+              "name": "scmsecret"
+          }
         },
         "strategy": {
           "type": "Source",
@@ -155,18 +158,7 @@
       },
       "spec": {
         "strategy": {
-          "type": "Recreate",
-          "recreateParams": {
-            "pre": {
-              "failurePolicy": "Abort",
-              "execNewPod": {
-                "command": [
-                  "./migrate-database.sh"
-                ],
-                "containerName": "${NAME}"
-              }
-            }
-          }
+          "type": "Recreate"
         },
         "triggers": [
           {
@@ -207,29 +199,13 @@
                     "containerPort": 8080
                   }
                 ],
-                "readinessProbe": {
-                  "timeoutSeconds": 3,
-                  "initialDelaySeconds": 5,
-                  "httpGet": {
-                    "path": "/articles",
-                    "port": 8080
-                  }
-                },
-                "livenessProbe": {
-                  "timeoutSeconds": 3,
-                  "initialDelaySeconds": 10,
-                  "httpGet": {
-                    "path": "/articles",
-                    "port": 8080
-                  }
-                },
                 "env": [
                   {
                     "name": "DATABASE_SERVICE_NAME",
                     "value": "${DATABASE_SERVICE_NAME}"
                   },
                   {
-                    "name": "POSTGRESQL_USER",
+                    "name": "PG_USERNAME",
                     "valueFrom": {
                       "secretKeyRef" : {
                         "name" : "${NAME}",
@@ -238,7 +214,7 @@
                     }
                   },
                   {
-                    "name": "POSTGRESQL_PASSWORD",
+                    "name": "PG_PASSWORD",
                     "valueFrom": {
                       "secretKeyRef" : {
                         "name" : "${NAME}",
@@ -256,7 +232,7 @@
                     }
                   },
                   {
-                    "name": "POSTGRESQL_DATABASE",
+                    "name": "PG_DATABASE",
                     "value": "${DATABASE_NAME}"
                   },
                   {

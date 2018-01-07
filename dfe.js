@@ -39,7 +39,9 @@ function templateParameters(nconf, propertiesFilePath, template) {
 
   const result = _.reduce(filteredZip, function(result,pair){
     const [key,value] = pair
-    result[key] = value
+    // override with the env var with the same name if it exists
+    const envVar = process.env[key]
+    result[key] = envVar || value
     return result
   }, {})
 
