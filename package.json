@@ -1,11 +1,14 @@
 {
   "name": "dfe-platform-tool",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Tooling for managing common tasks on the dfe digital platform.",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
     "dfe": "node index.js"
+  },
+  "bin": {
+    "ocd": "bin/dfe-platform-tool.js"
   },
   "author": "Simon Massey massey1905@gmail.com",
   "license": "MIT",

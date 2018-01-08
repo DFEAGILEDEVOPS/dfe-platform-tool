@@ -5,10 +5,10 @@ const assert = require('assert')
 const importFresh = require('import-fresh')
 
 // code under test
-const parameters = require('../dfe.js').parameters
+const parameters = require('../ocd.js').parameters
 
 // code under test
-const templateParameters = require('../dfe.js').templateParameters
+const templateParameters = require('../ocd.js').templateParameters
 
 describe('dfe platform tooling', function(){
  
