@@ -1,14 +1,19 @@
 {
   "name": "dfe-platform-tool",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Tooling for managing common tasks on the dfe digital platform.",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
     "dfe": "node index.js"
   },
-  "author": "",
+  "author": "Simon Massey simbo1905@gmail.com",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DFEAGILEDEVOPS/dfe-platform-tool.git"
+  },
+  "homepage": "https://github.com/DFEAGILEDEVOPS/dfe-platform-tool/wiki",
   "devDependencies": {
     "import-fresh": "^2.0.0",
     "mocha": "^4.1.0",
