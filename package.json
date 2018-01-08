@@ -7,7 +7,7 @@
     "test": "mocha",
     "dfe": "node index.js"
   },
-  "author": "Simon Massey simbo1905@gmail.com",
+  "author": "Simon Massey massey1905@gmail.com",
   "license": "MIT",
   "repository": {
     "type": "git",
