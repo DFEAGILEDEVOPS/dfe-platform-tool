@@ -1,0 +1,72 @@
+# dotnetVersions should only contain healthy images as shown at https://access.redhat.com/containers/?tab=tags#/registry.access.redhat.com/dotnet/dotnet-20-runtime-rhel7 and https://access.redhat.com/articles/2803031
+# will be supplied by the platform
+dotnetVersions:
+  - 2.0-9
+  - 2.0-10
+# dotnetVersion should contain the a healthy version from the list above to be supplied by the project team. 
+# is validated against known healthy list supplied by the platform
+dotnetVersion: 2.0-9
+# any old other value as something parsed but ignored in the test
+rshinyVersion: 1.5.3.838
+# The list of templates that are to be run to with the parameters. will be supplied by the platform
+templates: 
+ - image-streams.json
+ - build-config.yaml
+# The list of parameters to apply to a given template
+templateParameters: 
+  dotnet-example.json:
+    APPLICATION_DOMAIN: 
+      desc: "The exposed hostname that will route to the .NET Core service, if left blank a value will be defaulted."
+      value: ~
+    CONTEXT_DIR: 
+      desc: "Set this to use a subdirectory of the source code repository"
+      value: ~
+    DOTNET_ASSEMBLY_NAME: 
+      desc: "Set this when the assembly name is overridden in the project file."
+      value: ~
+    DOTNET_CONFIGURATION: 
+      desc: "Set this to configuration (Release/Debug)."
+      value: Release
+    DOTNET_IMAGE_STREAM_TAG: 
+      desc: "The image stream tag which is used to build the code."
+      value: "dotnet:2.0"
+    DOTNET_NPM_TOOLS: 
+      desc: "Set this to a space separated list of npm tools needed to publish."
+      value: "bower gulp"
+    DOTNET_RESTORE_SOURCES: 
+      desc: "Set this to override the NuGet.config sources."
+      value: ~
+    DOTNET_STARTUP_PROJECT: 
+      desc: "Set this to a project file (e.g. csproj) or a folder containing a single project file."
+      value: app
+    DOTNET_TEST_PROJECTS: 
+      desc: "Set this to a space separated list of test projects to run before publishing."
+      value: ~
+    GENERIC_WEBHOOK_SECRET: 
+      desc: "A secret string used to configure the Generic webhook."
+      value: expression
+    GITHUB_WEBHOOK_SECRET: 
+      desc: "A secret string used to configure the GitHub webhook."
+      value: expression
+    MEMORY_LIMIT: 
+      desc: "Maximum amount of memory the container can use."
+      value: 512Mi
+    NAME: 
+      desc: "The name assigned to all of the frontend objects defined in this template."
+      value: dotnet-example
+    NAMESPACE: 
+      desc: "The OpenShift Namespace where the ImageStream resides."
+      value: openshift
+    SOURCE_REPOSITORY_REF: 
+      desc: "Set this to a branch name, tag or other ref of your repository if you are not using the default branch."
+      value: dotnetcore-2.0
+    SOURCE_REPOSITORY_URL: 
+      desc: "The URL of the repository with your application source code."
+      value: "https://github.com/redhat-developer/s2i-dotnetcore-ex.git"
+  dotnetpgsql.json:
+    WHATEVER: 
+      desc: "The exposed hostname that will route to the .NET Core service, if left blank a value will be defaulted."
+      value: ~
+    BLAH: 
+      desc: "Set this to use a subdirectory of the source code repository"
+      value: ~

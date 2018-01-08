@@ -1,8 +1,14 @@
 {
-  "name": "dfe-platform-tool",
+  "name": "generator-dfe-platform-tool",
   "version": "0.2.0",
   "description": "Tooling for managing common tasks on the dfe digital platform.",
-  "main": "index.js",
+  "main": "generators/index.js",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "files": [
+    "generators"
+  ],
   "scripts": {
     "test": "mocha",
     "dfe": "node index.js"
@@ -24,10 +30,18 @@
     "unit.js": "^2.0.0"
   },
   "dependencies": {
+    "chalk": "^2.3.0",
+    "gulp-beautify": "^2.0.1",
+    "gulp-filter": "^5.1.0",
+    "gulp-json-transform": "^0.4.5",
     "lodash": "^4.17.4",
     "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "nconf": "^0.10.0",
     "nconf-yaml": "^1.0.2",
-    "string-template": "^1.0.0"
+    "path": "^0.12.7",
+    "string-template": "^1.0.0",
+    "yeoman-generator": "^1.0.0",
+    "yosay": "^2.0.1"
   }
 }
