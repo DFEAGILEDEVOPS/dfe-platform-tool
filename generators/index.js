@@ -21,24 +21,29 @@ module.exports = class extends Generator {
     return this.options.scmsecret || false
   }
 
+  _private_doRealWork() {
+    return !this.options.dryrun
+  }
+
   // The name `constructor` is important here
   constructor(args, opts) {
+
     super(args, opts);
 
-    // This makes `appname` a required argument.
-    this.argument('appname', { type: String, required: true });
+    // `appname` a required argument.
+    this.argument('appname', { type: String, required: true, desc: "The name of app which is used in BuilConf, Service, Pods." });
 
-    // And you can then access it later; e.g.
-    this.log(this.options.appname);
+    // `framework` a required argument.
+    this.argument('framework', { type: String, required: true, desc: "The framework. Currently ignored as we only have a single dotnet template today. More to come. " } );
 
-    // This makes `appname` a required argument.
-    this.argument('framework', { type: String, required: true });
+    // `giturl` a required argument.
+    this.argument('gitrepo', { type: String, desc: "The git repo uri to use in the BuildConfig.", default: "https://github.com/redhat-developer/s2i-dotnetcore-ex.git" } );
 
-    // And you can then access it later; e.g.
-    this.log(this.options.framework);
-    
+    // whether to run or logout what would have been done
+    this.option('dryrun', { desc: "To nothing but log an indication of what you would have done."});
+
     // whether to include the or delete the scmsecret sedtion of the template
-    this.option('scmsecret');
+    this.option('scmsecret', { desc: "Private GitHub repo so add 'scmsecret' to Git section of the BuildConfig."});
 
     const self = this;
 
@@ -68,7 +73,16 @@ module.exports = class extends Generator {
   }
 
   default() {
-    if (path.basename(this.destinationPath()) !== this.options.appname) {
+
+    this.log("dryrun: "+this.options.dryrun)
+
+    // And you can then access it later; e.g.
+    this.log("appname: "+this.options.appname)
+    this.log("framework: "+this.options.framework)
+    this.log("gitrepo: "+this.options.gitrepo)
+    this.log("scmsecret: "+this.options.scmsecret)
+
+    if (this._private_doRealWork() && path.basename(this.destinationPath()) !== this.options.appname) {
       this.log(
         'Your generator must be inside a folder named ' + this.options.appname + '\n' +
         'I\'ll automatically create this folder.'
@@ -79,13 +93,16 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    this.fs.copy(
-      this.templatePath('dotnet-pgsql.json'),
-      this.destinationPath('dotnet-pgsql.json')
-    );
-    this.fs.copy(
-      this.templatePath('name-properties.yaml'),
-      this.destinationPath(this.options.appname+'-properties.yaml')
-    );
+    if( this._private_doRealWork() ){
+      this.fs.copy(
+        this.templatePath('dotnet-pgsql.json'),
+        this.destinationPath('dotnet-pgsql.json')
+      );
+      this.fs.copyTpl(
+        this.templatePath('name-properties.yaml'),
+        this.destinationPath(this.options.appname+'-properties.yaml'),
+          { gitrepo: this.options.gitrepo }
+      );
+    }
   }
 };

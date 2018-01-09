@@ -62,7 +62,7 @@ templateParameters:
       value: dotnetcore-2.0
     SOURCE_REPOSITORY_URL: 
       desc: "The URL of the repository with your application source code."
-      value: "https://github.com/redhat-developer/s2i-dotnetcore-ex.git"
+      value: "<%= gitrepo %>"
   dotnetpgsql.json:
     WHATEVER: 
       desc: "The exposed hostname that will route to the .NET Core service, if left blank a value will be defaulted."
