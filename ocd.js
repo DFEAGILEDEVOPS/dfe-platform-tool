@@ -50,4 +50,4 @@ function templateParameters(nconf, propertiesFilePath, template) {
 
 module.exports['templateParameters'] = templateParameters
 
-const compileTemplate = require("string-template/compile")
+//const compileTemplate = require("string-template/compile")
