@@ -10,8 +10,7 @@
     "generators"
   ],
   "scripts": {
-    "test": "mocha",
-    "dfe": "node index.js"
+    "test": "mocha"
   },
   "bin": {
     "ocd": "bin/dfe-platform-tool.js"
@@ -40,7 +39,7 @@
     "nconf": "^0.10.0",
     "nconf-yaml": "^1.0.2",
     "path": "^0.12.7",
-    "string-template": "^1.0.0",
+    //"string-template": "^1.0.0",
     "yeoman-generator": "^1.0.0",
     "yosay": "^2.0.1"
   }

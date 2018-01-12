@@ -11,6 +11,9 @@ const argv = require('minimist')(process.argv.slice(2,process.argv.length))
 const command = argv._[0]
 
 switch(command) {
+    /* Read the parameters yaml file and spit them out in a format that can be consumed with oc.
+     * Overrides anything in the yaml file if there is an env var with the same name. 
+     * This allows the platform to set some env var parameters. */
     case "parameters":
         const template = argv.t
         const properties = argv.c
@@ -21,6 +24,7 @@ switch(command) {
             console.log(key+"="+parameters[key])
         }
         break;
+    /* Loads a private ssh key into an oc secret as `scmsecret` so that private repos can be built. */
     case "scmsecret":
         const sshprivatekey = argv._[1]
         if( sshprivatekey.startsWith('ssh-privatekey=') ) {
@@ -32,6 +36,11 @@ switch(command) {
             console.error(msg)
             throw new Error("Invalid arguments. "+msg)
         }
+        break;
+    /* prmotes a particular tagged build from one oc project to another */
+    case "promote": 
+        console.log("promote: "+argv._)
+
         break;
     default:
         throw new Error("Unrecognised command: "+command);
