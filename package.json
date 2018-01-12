@@ -13,7 +13,7 @@
     "test": "mocha"
   },
   "bin": {
-    "ocd": "bin/dfe-platform-tool.js"
+    "ocd": "bin/ocd.js"
   },
   "author": "Simon Massey massey1905@gmail.com",
   "license": "MIT",
@@ -39,7 +39,6 @@
     "nconf": "^0.10.0",
     "nconf-yaml": "^1.0.2",
     "path": "^0.12.7",
-    //"string-template": "^1.0.0",
     "yeoman-generator": "^1.0.0",
     "yosay": "^2.0.1"
   }

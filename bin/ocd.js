@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 // the main library of this tool
-const dfe = require('../ocd.js')
+const dfe = require('../ocd-lib.js')
 // a config library that does overrides  
 const nconf = require('nconf')
 // a command line parse. when running "npm run_script" the first two process.argv are "../bin/node" and "index.js" which we drop
@@ -37,10 +37,14 @@ switch(command) {
             throw new Error("Invalid arguments. "+msg)
         }
         break;
-    /* prmotes a particular tagged build from one oc project to another */
-    case "promote": 
-        console.log("promote: "+argv._)
-
+    /* Creates a new project and adds collaborators  */
+    case "new-project": 
+        const name = argv._[1]
+        console.log("oc new-project "+name)
+        const collaborators = argv._.slice(2, argv._.length)
+        collaborators.forEach(function(element) {
+            console.log("oc policy add-role-to-user admin "+element)
+        }, this);
         break;
     default:
         throw new Error("Unrecognised command: "+command);
