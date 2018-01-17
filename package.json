@@ -1,6 +1,6 @@
 {
   "name": "generator-dfe-platform-tool",
-  "version": "0.4.0",
+  "version": "0.6.0",
   "description": "Tooling for managing common tasks on the dfe digital platform.",
   "main": "generators/index.js",
   "keywords": [
