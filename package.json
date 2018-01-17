@@ -1,6 +1,6 @@
 {
   "name": "generator-dfe-platform-tool",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Tooling for managing common tasks on the dfe digital platform.",
   "main": "generators/index.js",
   "keywords": [
@@ -13,7 +13,7 @@
     "test": "mocha"
   },
   "bin": {
-    "ocd": "bin/ocd.js"
+    "ocd": "generators/ocd.js"
   },
   "author": "Simon Massey massey1905@gmail.com",
   "license": "MIT",
