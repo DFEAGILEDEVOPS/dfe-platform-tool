@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 // the main library of this tool
-const ocd = require('../ocd-lib.js')
+const ocd = require('./ocd-lib.js')
 // a config library that does overrides  
 const nconf = require('nconf')
 // a command line parse. when running "npm run_script" the first two process.argv are "../bin/node" and "index.js" which we drop
