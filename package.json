@@ -1,19 +1,20 @@
 {
   "name": "generator-dfe-platform-tool",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Tooling for managing common tasks on the dfe digital platform.",
   "main": "generators/index.js",
   "keywords": [
     "yeoman-generator"
   ],
   "files": [
-    "generators"
+    "generators",
+    "bin"
   ],
   "scripts": {
     "test": "mocha"
   },
   "bin": {
-    "ocd": "generators/ocd.js"
+    "ocd": "bin/ocd.js"
   },
   "author": "Simon Massey massey1905@gmail.com",
   "license": "MIT",
