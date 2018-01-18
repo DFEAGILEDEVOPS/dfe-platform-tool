@@ -98,9 +98,18 @@ module.exports = class extends Generator {
         this.templatePath('dotnet-pgsql.json'),
         this.destinationPath('dotnet-pgsql.json')
       );
+      this.fs.copy(
+        this.templatePath('dotnet-dbaas.json'),
+        this.destinationPath('dotnet-dbaas.json')
+      );
       this.fs.copyTpl(
         this.templatePath('name-properties.yaml'),
         this.destinationPath(this.options.appname+'-properties.yaml'),
+          { gitrepo: this.options.gitrepo }
+      );
+      this.fs.copyTpl(
+        this.templatePath('name-secret.yaml'),
+        this.destinationPath(this.options.appname+'-secret.yaml'),
           { gitrepo: this.options.gitrepo }
       );
     }

@@ -1,0 +1,18 @@
+    DATABASE_USER:
+      desc: "Database Username"
+      value: admin
+    DATABASE_PASSWORD:
+      desc: "Database Password"
+      value: KCTLWJKWLXPJKQYZ
+    DATABASE_NAME:
+      desc: "Database Name"
+      value: compose
+    POSTGRESQL_SERVICE_HOST:
+      desc: "Database remote server host   to connect to database outside of cluster"
+      value: "aws-eu-west-1-portal.2.dblayer.com"
+    PG_SSL:
+      desc: "Postgres SSL connection string options"
+      value: "SSL Mode=Require;Trust Server Certificate=true"
+    POSTGRESQL_SERVICE_PORT:
+      desc: "Postgres port"
+      value: "18242"

@@ -1,0 +1,431 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "dotnet-template",
+    "annotations": {
+      "openshift.io/display-name": "dotnet + Compose.io",
+      "description": "An example dotnet application connecting to a Compose.com PostgreSQL database.",
+      "tags": "quickstart,dotnet",
+      "iconClass": "icon-dotnet",
+      "openshift.io/long-description": "This template defines resources needed to develop a dotnet application, including a build configuration, application deployment configuration, and database connection configuration.",
+      "openshift.io/provider-display-name": "Department for Education",
+      "openshift.io/documentation-url": "https://github.com/openshift/rails-ex",
+      "openshift.io/support-url": "https://access.redhat.com",
+      "template.openshift.io/bindable": "false"
+    }
+  },
+  "message": "The following service(s) have been created in your project: ${NAME}.\n\nFor more information about using this template, including OpenShift considerations, see https://github.com/openshift/rails-ex/blob/master/README.md.",
+  "labels": {
+      "template": "dotnet-pgsql-compose",
+      "app": "dotnet-pgsql-compose"
+  },
+  "objects": [
+    {
+      "kind": "Secret",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}"
+      },
+      "stringData" : {
+        "database-user" : "${DATABASE_USER}",
+        "database-password" : "${DATABASE_PASSWORD}",
+        "application-user" : "${APPLICATION_USER}",
+        "application-password" : "${APPLICATION_PASSWORD}",
+        "keybase" : "${SECRET_KEY_BASE}"
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "annotations": {
+          "description": "Exposes and load balances the application pods"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "web",
+            "port": 8080,
+            "targetPort": 8080
+          }
+        ],
+        "selector": {
+          "name": "${NAME}"
+        }
+      }
+    },
+    {
+      "kind": "Route",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}"
+      },
+      "spec": {
+        "host": "${APPLICATION_DOMAIN}",
+        "to": {
+          "kind": "Service",
+          "name": "${NAME}"
+        }
+      }
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "annotations": {
+          "description": "Keeps track of changes in the application image"
+        }
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "annotations": {
+          "description": "Defines how to build the application",
+          "template.alpha.openshift.io/wait-for-ready": "true"
+        }
+      },
+      "spec": {
+        "source": {
+          "type": "Git",
+          "git": {
+            "uri": "${SOURCE_REPOSITORY_URL}",
+            "ref": "${SOURCE_REPOSITORY_REF}"
+          },
+          "contextDir": "${CONTEXT_DIR}",
+          "sourceSecret": {
+              "name": "scmsecret"
+          }
+        },
+        "strategy": {
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${NAMESPACE}",
+              "name": "dotnet:2.0"
+            },
+            "incremental": true,
+            "env": [
+              {
+                "name": "DOTNET_CONFIGURATION",
+                "value": "Release"
+              },
+              {
+                "name": "DOTNET_PUBLISH",
+                "value": "true"
+              }
+            ]
+          }
+        },
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "${NAME}:latest"
+          }
+        },
+        "triggers": [
+          {
+            "type": "ImageChange"
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "GitHub",
+            "github": {
+              "secret": "${GITHUB_WEBHOOK_SECRET}"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "${NAME}",
+        "annotations": {
+          "description": "Defines how to deploy the application server",
+          "template.alpha.openshift.io/wait-for-ready": "true"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Recreate"
+        },
+        "triggers": [
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "${NAME}"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "${NAME}:latest"
+              }
+            }
+          },
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "name": "${NAME}"
+        },
+        "template": {
+          "metadata": {
+            "name": "${NAME}",
+            "labels": {
+              "name": "${NAME}"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "${NAME}",
+                "image": " ",
+                "ports": [
+                  {
+                    "containerPort": 8080
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "DATABASE_SERVICE_NAME",
+                    "value": "${DATABASE_SERVICE_NAME}"
+                  },
+                  {
+                    "name": "POSTGRESQL_SERVICE_HOST",
+                    "value": "${POSTGRESQL_SERVICE_HOST}"
+                  },
+                  {
+                    "name": "POSTGRESQL_SERVICE_PORT",
+                    "value": "${POSTGRESQL_SERVICE_PORT}"
+                  },
+                  {
+                    "name": "PG_USERNAME",
+                    "valueFrom": {
+                      "secretKeyRef" : {
+                        "name" : "${NAME}",
+                        "key" : "database-user"
+                      }
+                    }
+                  },
+                  {
+                    "name": "PG_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef" : {
+                        "name" : "${NAME}",
+                        "key" : "database-password"
+                      }
+                    }
+                  },
+                  {
+                    "name": "SECRET_KEY_BASE",
+                    "valueFrom": {
+                      "secretKeyRef" : {
+                        "name" : "${NAME}",
+                        "key" : "keybase"
+                      }
+                    }
+                  },
+                  {
+                    "name": "PG_DATABASE",
+                    "value": "${DATABASE_NAME}"
+                  },
+                  {
+                    "name": "POSTGRESQL_MAX_CONNECTIONS",
+                    "value": "${POSTGRESQL_MAX_CONNECTIONS}"
+                  },
+                  {
+                    "name": "POSTGRESQL_SHARED_BUFFERS",
+                    "value": "${POSTGRESQL_SHARED_BUFFERS}"
+                  },
+                  {
+                    "name": "APPLICATION_DOMAIN",
+                    "value": "${APPLICATION_DOMAIN}"
+                  },
+                  {
+                    "name": "APPLICATION_USER",
+                    "valueFrom": {
+                      "secretKeyRef" : {
+                        "name" : "${NAME}",
+                        "key" : "application-user"
+                      }
+                    }
+                  },
+                  {
+                    "name": "APPLICATION_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef" : {
+                        "name" : "${NAME}",
+                        "key" : "application-password"
+                      }
+                    }
+                  },
+                  {
+                    "name": "ASPNETCORE_ENVIRONMENT",
+                    "value": "${ASPNETCORE_ENVIRONMENT}"
+                  },
+                  {
+                    "name": "PG_SSL",
+                    "value": "${PG_SSL}"
+                  }
+                ],
+                "resources": {
+                  "limits": {
+                    "memory": "${MEMORY_LIMIT}"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "parameters": [
+    {
+      "name": "NAME",
+      "displayName": "Name",
+      "description": "The name assigned to all of the frontend objects defined in this template.",
+      "required": true
+    },
+    {
+      "name": "NAMESPACE",
+      "displayName": "Namespace",
+      "required": true,
+      "description": "The OpenShift Namespace where the ImageStream resides.",
+      "value": "openshift"
+    },
+    {
+      "name": "MEMORY_LIMIT",
+      "displayName": "Memory Limit",
+      "required": true,
+      "description": "Maximum amount of memory the dotnet container can use.",
+      "value": "512Mi"
+    },
+    {
+      "name": "MEMORY_POSTGRESQL_LIMIT",
+      "displayName": "Memory Limit (PostgreSQL)",
+      "required": true,
+      "description": "Maximum amount of memory the PostgreSQL container can use.",
+      "value": "512Mi"
+    },
+    {
+      "name": "VOLUME_CAPACITY",
+      "displayName": "Volume Capacity",
+      "description": "Volume space available for data, e.g. 512Mi, 2Gi",
+      "value": "1Gi",
+      "required": true
+    },
+    {
+      "name": "SOURCE_REPOSITORY_URL",
+      "displayName": "Git Repository URL",
+      "required": true,
+      "description": "The URL of the repository with your application source code.",
+      "value": "https://github.com/openshift/rails-ex.git"
+    },
+    {
+      "name": "SOURCE_REPOSITORY_REF",
+      "displayName": "Git Reference",
+      "description": "Set this to a branch name, tag or other ref of your repository if you are not using the default branch."
+    },
+    {
+      "name": "CONTEXT_DIR",
+      "displayName": "Context Directory",
+      "description": "Set this to the relative path to your project if it is not in the root of your repository."
+    },
+    {
+      "name": "APPLICATION_DOMAIN",
+      "displayName": "Application Hostname",
+      "description": "The exposed hostname that will route to the Rails service, if left blank a value will be defaulted.",
+      "value": ""
+    },
+    {
+      "name": "GITHUB_WEBHOOK_SECRET",
+      "displayName": "GitHub Webhook Secret",
+      "description": "Github trigger secret.  A difficult to guess string encoded as part of the webhook URL.  Not encrypted.",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{40}"
+    },
+    {
+      "name": "SECRET_KEY_BASE",
+      "displayName": "Secret Key",
+      "description": "Your secret key for verifying the integrity of signed cookies.",
+      "generate": "expression",
+      "from": "[a-z0-9]{127}"
+    },
+    {
+      "name": "APPLICATION_USER",
+      "displayName": "Application Username",
+      "required": true,
+      "description": "The application user that is used within the sample application to authorize access on pages.",
+      "value": "openshift"
+    },
+    {
+      "name": "APPLICATION_PASSWORD",
+      "displayName": "Application Password",
+      "required": true,
+      "description": "The application password that is used within the sample application to authorize access on pages.",
+      "value": "secret"
+    },
+    {
+      "name": "DATABASE_SERVICE_NAME",
+      "displayName": "Database Service Name",
+      "value": ""
+    },
+    {
+      "name": "POSTGRESQL_MAX_CONNECTIONS",
+      "displayName": "Maximum Database Connections",
+      "value": "100"
+    },
+    {
+      "name": "POSTGRESQL_SHARED_BUFFERS",
+      "displayName": "Shared Buffer Amount",
+      "value": "12MB"
+    },
+    {
+      "name": "PG_SSL",
+      "value": "SSL Mode=Prefer;Trust Server Certificate=true"
+    },
+    {
+      "name": "ASPNETCORE_ENVIRONMENT",
+      "required": true,
+      "value": "Production"
+    },
+    {
+      "name": "POSTGRESQL_SERVICE_HOST",
+      "required": true
+    },
+    {
+      "name": "POSTGRESQL_SERVICE_PORT",
+      "required": true
+    },
+    {
+      "name": "DATABASE_USER",
+      "displayName": "Database Username",
+      "required": true
+    },
+    {
+      "name": "DATABASE_PASSWORD",
+      "displayName": "Database Password",
+      "required": true
+    },
+    {
+      "name": "DATABASE_NAME",
+      "required": true,
+      "displayName": "Database Name"
+    }
+  ]
+}
