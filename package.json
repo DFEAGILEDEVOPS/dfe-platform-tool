@@ -1,6 +1,6 @@
 {
   "name": "generator-dfe-platform-tool",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Tooling for managing common tasks on the dfe digital platform.",
   "license" : "MIT",
   "repository" :
